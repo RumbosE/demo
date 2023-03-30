@@ -36,8 +36,8 @@ class ProductService : IProductService {
     }
 
     override fun updateProduct(id: Long, product: Product): Product {
-        var productToUpdated = getProductById(id)
-        var newProduct = getProductById(id)
+        val productToUpdated = getProductById(id)
+        val newProduct = getProductById(id)
             newProduct[0].nombre = product.nombre
             newProduct[0].tipo = product.tipo
             newProduct[0].precio = product.precio
