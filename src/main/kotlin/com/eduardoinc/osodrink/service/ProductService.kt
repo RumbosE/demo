@@ -4,18 +4,37 @@ import ProductRepository
 import com.eduardoinc.osodrink.dao.Product
 import com.eduardoinc.osodrink.dto.ProductDto
 import org.springframework.stereotype.Service
-import kotlin.jvm.optionals.toList
+import java.util.*
 
 interface IProductService {
-    fun getAllProducts(): List<ProductDto>
-    fun getProductById(id: Int): ProductDto
-    fun deleteProduct()
-
+    fun getAllProducts(): List<Product>
+    fun getProductById(id: Long): List<Product>
+    fun deleteProduct(id: Long): String
+    fun saveProduct(product: Product) : String
 }
 
 @Service
-class ProductService (val db:ProductRepository): IProductService {
-    override fun getAllProducts(): List<ProductDto> = db.findAll().toList()
+class ProductService : IProductService {
 
-    override fun getProductById(id: Int): List<ProducDto> = db.findById(id).toList()
+    lateinit var db: ProductRepository
+
+    override fun getAllProducts(): List<Product> {
+        return db.findAll().toList()
+    }
+
+    override fun getProductById(id: Long): List<Product> = db.findById(id.toString()).toList()
+    override fun deleteProduct(id: Long): String {
+        db.deleteById(id.toString())
+        return "Product eliminated"
+    }
+    override fun saveProduct(product: Product): String {
+        db.save(product)
+        return "Product saved"
+    }
+
+    fun <T : Any> Optional<out T>.toList(): List<T> =
+            if (this.isPresent) listOf(this.get()) else emptyList()
 }
+
+
+

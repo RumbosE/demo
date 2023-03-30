@@ -1,5 +1,6 @@
 package com.eduardoinc.osodrink.dao
 
+import com.eduardoinc.osodrink.dto.ProductDto
 import jakarta.persistence.*
 
 @Entity
@@ -27,4 +28,16 @@ data class Product(
 
     @Column
     var foto: String? = null
-)
+) {
+    fun toDto() {
+        ProductDto(
+            id = id,
+            nombre = nombre,
+            tipo = tipo,
+            precio = precio,
+            cantidad = cantidad,
+            descripcion = descripcion,
+            foto = foto
+        )
+    }
+}
