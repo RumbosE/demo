@@ -29,12 +29,12 @@ class ProductController(
     }
 
     @PostMapping("/")
-    fun saveProduct(@RequestBody product: Product): String {
+    fun saveProduct(@RequestBody product: Product): Product {
         return productService.saveProduct(product)
     }
 
     @PatchMapping(":id/")
-    fun updateProduct(@PathVariable("id") id: Long, @RequestBody product: Product): String {
+    fun updateProduct(@PathVariable("id") id: Long, @RequestBody product: Product): Product {
         return productService.saveProduct(product)
     }
 

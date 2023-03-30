@@ -10,7 +10,8 @@ interface IProductService {
     fun getAllProducts(): List<Product>
     fun getProductById(id: Long): List<Product>
     fun deleteProduct(id: Long): String
-    fun saveProduct(product: Product) : String
+    fun saveProduct(product: Product) : Product
+    fun updateProduct(id: Long, product: Product): Product
 }
 
 @Service
@@ -21,17 +22,31 @@ class ProductService : IProductService {
     override fun getAllProducts(): List<Product> {
         return db.findAll().toList()
     }
-
-    override fun getProductById(id: Long): List<Product> = db.findById(id.toString()).toList()
+    override fun getProductById(id: Long): List<Product> {
+        return db.findById(id.toString()).toList()
+    }
     override fun deleteProduct(id: Long): String {
+        var productEliminated = getProductById(id)
         db.deleteById(id.toString())
-        return "Product eliminated"
+        return "Product ${productEliminated[0].nombre} was eliminated"
     }
-    override fun saveProduct(product: Product): String {
+    override fun saveProduct(product: Product): Product {
         db.save(product)
-        return "Product saved"
+        return product
     }
 
+    override fun updateProduct(id: Long, product: Product): Product {
+        var productToUpdated = getProductById(id)
+        var newProduct = getProductById(id)
+            newProduct[0].nombre = product.nombre
+            newProduct[0].tipo = product.tipo
+            newProduct[0].precio = product.precio
+            newProduct[0].cantidad = product.cantidad
+            newProduct[0].descripcion = product.descripcion
+            newProduct[0].foto = product.foto
+            db.save(newProduct[0])
+        return newProduct[0]
+    }
     fun <T : Any> Optional<out T>.toList(): List<T> =
             if (this.isPresent) listOf(this.get()) else emptyList()
 }
