@@ -1,52 +1,64 @@
 package com.eduardoinc.osodrink.service
 
-import ProductRepository
+import com.eduardoinc.osodrink.repository.ProductRepository
 import com.eduardoinc.osodrink.dao.Product
+import com.eduardoinc.osodrink.dto.ProductCreateRequestDto
 import com.eduardoinc.osodrink.dto.ProductDto
+import com.eduardoinc.osodrink.dto.ProductUpdateRequestDto
+import com.eduardoinc.osodrink.dto.ProductsDto
+import com.eduardoinc.osodrink.mapper.toDao
+import com.eduardoinc.osodrink.mapper.toDto
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 interface IProductService {
-    fun getAllProducts(): List<Product>
-    fun getProductById(id: Long): List<Product>
+    fun getAllProducts(): ProductsDto
+    fun getProductById(id: Long): ProductDto
     fun deleteProduct(id: Long): String
-    fun saveProduct(product: Product) : Product
-    fun updateProduct(id: Long, product: Product): Product
+    fun saveProduct(product: ProductCreateRequestDto) : ProductDto
+    fun updateProduct(id: Long, productRequest: ProductUpdateRequestDto): ProductDto
 }
 
 @Service
-class ProductService : IProductService {
+class ProductService(
+    private val productRepository: ProductRepository
+) : IProductService {
 
-    lateinit var db: ProductRepository
+    //TODO: Return page of products
+    override fun getAllProducts(): ProductsDto = productRepository.findAll()
+        .toList()
+        .map(Product::toDto)
+        .let { ProductsDto(it) }
 
-    override fun getAllProducts(): List<Product> {
-        return db.findAll().toList()
-    }
-    override fun getProductById(id: Long): List<Product> {
-        return db.findById(id.toString()).toList()
-    }
+    override fun getProductById(id: Long): ProductDto = getById(id).toDto()
+
     override fun deleteProduct(id: Long): String {
-        var productEliminated = getProductById(id)
-        db.deleteById(id.toString())
-        return "Product ${productEliminated[0].nombre} was eliminated"
-    }
-    override fun saveProduct(product: Product): Product {
-        db.save(product)
-        return product
+        val productEliminated = getProductById(id)
+        productRepository.deleteById(id)
+        return "Product ${productEliminated.name} was eliminated"
     }
 
-    override fun updateProduct(id: Long, product: Product): Product {
-        val productToUpdated = getProductById(id)
-        val newProduct = getProductById(id)
-            newProduct[0].nombre = product.nombre
-            newProduct[0].tipo = product.tipo
-            newProduct[0].precio = product.precio
-            newProduct[0].cantidad = product.cantidad
-            newProduct[0].descripcion = product.descripcion
-            newProduct[0].foto = product.foto
-            db.save(newProduct[0])
-        return newProduct[0]
+    override fun saveProduct(product: ProductCreateRequestDto): ProductDto = productRepository.save(product.toDao()).toDto()
+
+    @Transactional
+    override fun updateProduct(id: Long, productRequest: ProductUpdateRequestDto): ProductDto = with(productRequest) {
+        val product = getById(id)
+
+        name?.let { product.name = it }
+        type?.let { product.type = it }
+        price?.let { product.price = it }
+        amount?.let { product.amount = it }
+        description?.let { product.description = it }
+
+        product.toDto()
     }
+
+    private fun getById(id: Long) = productRepository.findById(id)
+        .getOrNull()
+        ?: throw NoSuchElementException("Product with id $id not found")
+
     fun <T : Any> Optional<out T>.toList(): List<T> =
             if (this.isPresent) listOf(this.get()) else emptyList()
 }
