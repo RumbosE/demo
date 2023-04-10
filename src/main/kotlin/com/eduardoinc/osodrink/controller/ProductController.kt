@@ -1,7 +1,7 @@
 package com.eduardoinc.osodrink.controller
 
-import com.eduardoinc.osodrink.dto.ProductCreateRequestDto
-import com.eduardoinc.osodrink.dto.ProductUpdateRequestDto
+import com.eduardoinc.osodrink.dto.product.ProductCreateRequestDto
+import com.eduardoinc.osodrink.dto.product.ProductUpdateRequestDto
 import com.eduardoinc.osodrink.service.IProductService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping

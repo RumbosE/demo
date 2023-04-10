@@ -1,8 +1,8 @@
-package com.eduardoinc.osodrink.mapper
+package com.eduardoinc.osodrink.mapper.products
 
 import com.eduardoinc.osodrink.dao.Product
-import com.eduardoinc.osodrink.dto.ProductCreateRequestDto
-import com.eduardoinc.osodrink.dto.ProductDto
+import com.eduardoinc.osodrink.dto.product.ProductCreateRequestDto
+import com.eduardoinc.osodrink.dto.product.ProductDto
 
 fun Product.toDto() = ProductDto(
     id = id,

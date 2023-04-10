@@ -2,12 +2,12 @@ package com.eduardoinc.osodrink.service
 
 import com.eduardoinc.osodrink.repository.ProductRepository
 import com.eduardoinc.osodrink.dao.Product
-import com.eduardoinc.osodrink.dto.ProductCreateRequestDto
-import com.eduardoinc.osodrink.dto.ProductDto
-import com.eduardoinc.osodrink.dto.ProductUpdateRequestDto
-import com.eduardoinc.osodrink.dto.ProductsDto
-import com.eduardoinc.osodrink.mapper.toDao
-import com.eduardoinc.osodrink.mapper.toDto
+import com.eduardoinc.osodrink.dto.product.ProductCreateRequestDto
+import com.eduardoinc.osodrink.dto.product.ProductDto
+import com.eduardoinc.osodrink.dto.product.ProductUpdateRequestDto
+import com.eduardoinc.osodrink.dto.product.ProductsDto
+import com.eduardoinc.osodrink.mapper.products.toDao
+import com.eduardoinc.osodrink.mapper.products.toDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*

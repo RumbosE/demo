@@ -1,4 +1,4 @@
-package com.eduardoinc.osodrink.dto
+package com.eduardoinc.osodrink.dto.product
 
 //TODO: Add validation
 data class ProductCreateRequestDto (

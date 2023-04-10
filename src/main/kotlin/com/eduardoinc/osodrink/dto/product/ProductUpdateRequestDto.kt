@@ -1,4 +1,4 @@
-package com.eduardoinc.osodrink.dto
+package com.eduardoinc.osodrink.dto.product
 
 data class ProductUpdateRequestDto(
     val name: String? = null,
